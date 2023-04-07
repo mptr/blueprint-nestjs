@@ -1,0 +1,6 @@
+.github
+.husky
+.vscode
+build
+dev
+test
