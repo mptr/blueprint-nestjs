@@ -26,6 +26,7 @@ jobs:
         with:
           eslint: true
           prettier: true
+          continue_on_error: false
 
   Unit-Test:
     runs-on: ubuntu-latest
@@ -74,7 +75,7 @@ jobs:
       - name: Comment nyc test results to PR
         uses: sidx1024/report-nyc-coverage-github-action@v1.1
         with:
-          coverage_file: "coverage/summary/coverage-final.json"
+          coverage_file: 'coverage/summary/coverage-final.json'
 
   build:
     needs: [check, test-report]
