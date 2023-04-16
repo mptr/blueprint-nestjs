@@ -27,34 +27,57 @@ jobs:
           eslint: true
           prettier: true
 
-  test:
+  Unit-Test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-pnpm
-
       - name: Unit Tests
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm test:unit-ci
+      - name: store coverage
+        uses: actions/upload-artifact@v2
         with:
-          test-command: 'pnpm test:unit-ci'
+          name: coverage-unit
+          path: coverage/unit
 
-  e2e:
+  E2E-Test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-pnpm
-
       - name: E2E Tests
-        uses: mattallty/jest-github-action@v1.0.3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm test:e2e-ci
+      - name: store coverage
+        uses: actions/upload-artifact@v2
         with:
-          test-command: 'pnpm test:e2e-ci'
+          name: coverage-e2e
+          path: coverage/e2e
+
+  test-report:
+    needs: [Unit-Test, E2E-Test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-pnpm
+      - name: Download Unit coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-unit
+          path: coverage/unit
+      - name: Download E2E coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage-e2e
+          path: coverage/e2e
+      - name: merge coverage
+        run: pnpm test:all-coverage
+      - name: Comment nyc test results to PR
+        uses: sidx1024/report-nyc-coverage-github-action@v1.1
+        with:
+          coverage_file: "coverage/summary/coverage-final.json"
 
   build:
-    needs: [check, test, e2e]
+    needs: [check, test-report]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

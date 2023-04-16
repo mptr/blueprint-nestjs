@@ -10,8 +10,8 @@ const config: Config = {
 	},
 	testEnvironment: 'node',
 	collectCoverageFrom: ['src/**/*.(t|j)s', '!src/(main|schedule).ts'],
-	coverageDirectory: './coverage-unit',
-	coverageReporters: ['json', 'lcov'],
+	coverageDirectory: './coverage/unit',
+	coverageReporters: ['json', 'html'],
 	coveragePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/'],
 	bail: true,
 };
