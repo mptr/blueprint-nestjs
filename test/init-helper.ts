@@ -1,13 +1,13 @@
 import { ModuleMetadata } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { TestingModule, Test } from '@nestjs/testing';
+import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 
-export const init = async (
+export const init = (
 	meta: ModuleMetadata = {
 		imports: [AppModule],
 	},
-): Promise<TestingModule> => {
+): TestingModuleBuilder => {
 	if (!meta.providers) meta.providers = [];
 
 	meta.providers.push({
@@ -20,5 +20,5 @@ export const init = async (
 		}),
 	});
 
-	return Test.createTestingModule(meta).compile();
+	return Test.createTestingModule(meta);
 };

@@ -10,7 +10,7 @@ describe('OAuthConfigService', () => {
 	beforeEach(async () => {
 		const module: TestingModule = await init({
 			providers: [OAuthConfigService],
-		});
+		}).compile();
 
 		service = module.get<OAuthConfigService>(OAuthConfigService);
 		configMap = service.create();
