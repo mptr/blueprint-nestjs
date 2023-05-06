@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { SampleConfigService } from './sample-config/sample-config.service';
+import { JwtConfigService } from './jwt-config/jwt-config.service';
+import { OAuthConfigService } from './oauth-config/oauth-config.service';
 
-const services = [SampleConfigService];
+const services = [JwtConfigService, OAuthConfigService];
 
 @Module({
 	imports: [
